@@ -72,7 +72,7 @@ namespace CSC446_Assignment_5_Nguyen
                             switch (Lexie.MatchTokens[increments])
                             {
                                 case "idt":
-                                case "equal":
+                                case "assignopt":
                                 case "numt":
                                 case "semit":
                                     {
@@ -296,7 +296,7 @@ namespace CSC446_Assignment_5_Nguyen
                         switch (Lexie.MatchTokens[increments])
                         {
                             case "idt":
-                            case "equal":
+                            case "assignopt":
                             case "numt":
                                 {
                                     Decl();
