@@ -37,7 +37,7 @@ namespace CSC446_Assignment_5_Nguyen
         {
             thent, ift, elset, whilet, floatt, intt, chart, breakt, continuet, voidt, lparent, rparent, unknownt, eoftt, blanks,
             literalt, relopt, assignopt, addopt, mulopt, idt, integert, nott, whitespace, semit, quotet, colont, commat, closeParent,
-            openParent, periodt, openCurlyParent, closeCurlyParent, openSquareParent, closeSquareParent, numt,
+            openParent, periodt, openCurlyParent, closeCurlyParent, openSquareParent, closeSquareParent, numt, constt,
         }
 
         /// <summary>

@@ -67,6 +67,26 @@ namespace CSC446_Assignment_5_Nguyen
                             }
                             break;
                         }
+                    case "constt":
+                        {
+                            switch (Lexie.MatchTokens[increments])
+                            {
+                                case "idt":
+                                case "equal":
+                                case "numt":
+                                case "semit":
+                                    {
+                                        Decl();
+                                        break;
+                                    }
+                                case "eoftt":
+                                    {
+                                        done = true;
+                                        break;
+                                    }
+                            }
+                            break;
+                        }
                     case "eoftt":
                         done = true;
                         break;
@@ -269,6 +289,20 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "closeCurlyParent":
                     {
+                        break;
+                    }
+                case "constt":
+                    {
+                        switch (Lexie.MatchTokens[increments])
+                        {
+                            case "idt":
+                            case "equal":
+                            case "numt":
+                                {
+                                    Decl();
+                                    break;
+                                }
+                        }
                         break;
                     }
                 default:
