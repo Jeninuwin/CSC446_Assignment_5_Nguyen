@@ -67,9 +67,11 @@ namespace CSC446_Assignment_5_Nguyen
         public static string ValueL;//literal
 
         /// <summary>
-        /// Defines the MatchTokens.
+        /// Defines the MatchTokens
         /// </summary>
         public static List<string> MatchTokens = new List<string>();
+
+        public static List<string> LexemeString = new List<string>();
 
         /// <summary>
         /// Defines the counting.
@@ -175,6 +177,7 @@ namespace CSC446_Assignment_5_Nguyen
             {
                 Console.WriteLine("ERROR: Invalid Token. The Length cannot be more than 27.");
                 Token = Symbols.unknownt;
+                LexemeString.Add(Lexeme);
                 MatchTokens.Add("unknownt");
                 counting++;
             }
@@ -192,6 +195,7 @@ namespace CSC446_Assignment_5_Nguyen
                 {
                     Console.WriteLine("ERROR: Invalid Comment. Comment does not end with a '*/'.");
                     Token = Symbols.unknownt;
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("unknowt");
                     counting++;
                     break;
@@ -225,60 +229,77 @@ namespace CSC446_Assignment_5_Nguyen
             switch (Lexeme.ToLower())
             {
                 case "break":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("breakt");
                     Token = Symbols.breakt;
                     counting++;
 
                     break;
                 case "char":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("chart");
                     Token = Symbols.chart;
                     counting++;
 
                     break;
                 case "continue":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("continuet");
                     Token = Symbols.continuet;
                     counting++;
 
                     break;
                 case "else":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("elset");
                     Token = Symbols.elset;
                     counting++;
 
                     break;
                 case "float":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("floatt");
                     Token = Symbols.floatt;
                     counting++;
 
                     break;
                 case "if":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("ift");
                     Token = Symbols.ift;
                     counting++;
 
                     break;
                 case "int":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("intt");
                     Token = Symbols.intt;
                     counting++;
 
                     break;
                 case "void":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("voidt");
                     Token = Symbols.voidt;
                     counting++;
 
                     break;
                 case "while":
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("whilet");
                     Token = Symbols.whilet;
                     counting++;
 
                     break;
+                case "const":
+                    LexemeString.Add(Lexeme);
+                    MatchTokens.Add("constt");
+                    Token = Symbols.constt;
+                    counting++;
+
+                    break;
                 default:
+                    LexemeString.Add(Lexeme);
                     MatchTokens.Add("idt");
                     Token = Symbols.idt;
                     counting++;
@@ -307,6 +328,7 @@ namespace CSC446_Assignment_5_Nguyen
             if (Lexeme[Lexeme.Length - 1] == '.')
             {
                 Token = Symbols.unknownt;
+                LexemeString.Add(Lexeme);
                 MatchTokens.Add("unknownt");
                 Console.WriteLine("ERROR: On line" + LineNo + "contains an error");
                 return;
@@ -316,12 +338,14 @@ namespace CSC446_Assignment_5_Nguyen
                 ValueR = System.Convert.ToDouble(Lexeme);
                 Token = Symbols.numt;
                 MatchTokens.Add("numt");
+                LexemeString.Add(Lexeme);
             }
             else
             {
                 Value = System.Convert.ToInt32(Lexeme);
                 Token = Symbols.numt;
                 MatchTokens.Add("numt");
+                LexemeString.Add(Lexeme);
             }
         }
 
@@ -368,6 +392,7 @@ namespace CSC446_Assignment_5_Nguyen
 
             if (!hasEnding)
             {
+                LexemeString.Add(Lexeme);
                 MatchTokens.Add("unknownt");
                 Token = Symbols.unknownt;
                 counting++;
@@ -376,6 +401,7 @@ namespace CSC446_Assignment_5_Nguyen
             }
             else
             {
+                LexemeString.Add(Lexeme);
                 MatchTokens.Add("literalt");
                 Token = Symbols.literalt;
                 counting++;
@@ -403,6 +429,7 @@ namespace CSC446_Assignment_5_Nguyen
             //otherwise, set the token to eoftt since it's the end of the stream
             else
             {
+                LexemeString.Add(Lexeme);
                 MatchTokens.Add("eoftt");
                 Token = Symbols.eoftt;
                 counting++;
@@ -460,6 +487,7 @@ namespace CSC446_Assignment_5_Nguyen
                 case ">":
                 case "=":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.relopt;
                         MatchTokens.Add("relopt");
                         counting++;
@@ -467,6 +495,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case ".":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.periodt;
                         MatchTokens.Add("periodt");
                         counting++;
@@ -474,6 +503,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "(":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.lparent;
                         MatchTokens.Add("lparent");
                         counting++;
@@ -481,6 +511,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case ")":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.rparent;
                         MatchTokens.Add("rparent");
                         counting++;
@@ -488,6 +519,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "{":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.openCurlyParent;
                         MatchTokens.Add("openCurlyParent");
                         counting++;
@@ -495,6 +527,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "}":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.closeCurlyParent;
                         MatchTokens.Add("closeCurlyParent");
                         counting++;
@@ -502,6 +535,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "[":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.openSquareParent;
                         MatchTokens.Add("openSquareParent");
                         counting++;
@@ -509,6 +543,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "]":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.closeSquareParent;
                         MatchTokens.Add("closeSquareParent");
                         counting++;
@@ -516,6 +551,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case ",":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.commat;
                         MatchTokens.Add("commat");
                         counting++;
@@ -525,6 +561,7 @@ namespace CSC446_Assignment_5_Nguyen
                 case "-":
                 case "|":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.addopt;
                         MatchTokens.Add("addopt");
                         counting++;
@@ -532,6 +569,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case ":":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.colont;
                         MatchTokens.Add("colont");
                         counting++;
@@ -539,6 +577,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case ";":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.semit;
                         MatchTokens.Add("semit");
                         counting++;
@@ -556,6 +595,7 @@ namespace CSC446_Assignment_5_Nguyen
                 case "*":
                 case "/":
                     {
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.mulopt;
                         MatchTokens.Add("mulopt");
                         counting++;
@@ -566,12 +606,14 @@ namespace CSC446_Assignment_5_Nguyen
 
             if (Lexeme[0] == 65535)
             {
+                LexemeString.Add(Lexeme);
                 Token = Symbols.eoftt;
                 MatchTokens.Add("eoftt");
                 counting++;
             }
             if (Lexeme[0] == '=')
             {
+                LexemeString.Add(Lexeme);
                 Token = Symbols.assignopt;
                 MatchTokens.Add("assignopt");
                 counting++;
@@ -590,7 +632,7 @@ namespace CSC446_Assignment_5_Nguyen
                 case "<=":
                     {
                         Lexeme = Lexeme[0].ToString() + ch.ToString();
-
+                        LexemeString.Add(Lexeme);
                         Token = Symbols.relopt;
                         MatchTokens.Add("relopt");
                         counting++;
@@ -599,6 +641,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case ">=":
                     {
+                        LexemeString.Add(Lexeme);
                         Lexeme = Lexeme[0].ToString() + ch.ToString();
                         Token = Symbols.relopt;
                         MatchTokens.Add("relopt");
@@ -608,6 +651,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "==":
                     {
+                        LexemeString.Add(Lexeme);
                         Lexeme = Lexeme[0].ToString() + ch.ToString();
                         Token = Symbols.relopt;
                         MatchTokens.Add("relopt");
@@ -617,6 +661,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "!=":
                     {
+                        LexemeString.Add(Lexeme);
                         Lexeme = Lexeme[0].ToString() + ch.ToString();
                         Token = Symbols.relopt;
                         MatchTokens.Add("relopt");
@@ -635,6 +680,7 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "&&":
                     {
+                        LexemeString.Add(Lexeme);
                         Lexeme = Lexeme[0].ToString() + ch.ToString();
                         Token = Symbols.mulopt;
                         MatchTokens.Add("relopt");
@@ -646,6 +692,7 @@ namespace CSC446_Assignment_5_Nguyen
             };
             if (Lexeme[0] == 65535) //if this reaches the end of the file set it to eoft
             {
+                LexemeString.Add(Lexeme);
                 Token = Symbols.eoftt;
                 MatchTokens.Add("eoftt");
                 counting++;

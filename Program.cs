@@ -14,11 +14,12 @@ namespace CSC446_Assignment_5_Nguyen
     /// </summary>
     public class Program
     {
-        public void Main(string[] args)
+        public static void Main(string[] args)
         {
         start:
             Lexie.LexicalAnalyzer(args);
             Console.WriteLine("Lexical Analyzer completed. Commencing Parser.\n");
+            SymbolTable.symList();
             Parser.Parse();
             Console.WriteLine("\nParser completed completed.");
 

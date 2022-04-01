@@ -13,6 +13,17 @@ namespace CSC446_Assignment_5_Nguyen
     /// </summary>
     public class Parser
     {
+        public static int currentOffset = 0;
+        public static int charOffset = 1;
+        public static int floatOffset = 4;
+        public static int intOffset = 2;
+        public static int totalOffset;
+        public static int depth = 0;
+        public static int tempies;
+
+        public static SymbolTable.entryTable val = new SymbolTable.entryTable();
+
+        public SymbolTable sym = new SymbolTable();
         /// <summary>
         /// Defines the increments  while setting it to 0.
         /// </summary>
@@ -48,12 +59,37 @@ namespace CSC446_Assignment_5_Nguyen
                     case "floatt":
                     case "chart":
                         {
+                            //offset increase base on type 
+                            if(Lexie.MatchTokens[increments] == "intt")
+                            {
+                                currentOffset = intOffset;
+                            }
+                            else if (Lexie.MatchTokens[increments] == "floatt")
+                            {
+                                currentOffset = floatOffset;
+                            }
+                            else
+                            {
+                                currentOffset = charOffset;
+                            }
+
+                            totalOffset += currentOffset;
+
                             increments++;
 
                             switch (Lexie.MatchTokens[increments]) //this will see if the MatchTokens will match "idt" if it does call Rest, else error
                             {
                                 case "idt":
                                     {
+                                        //store after the value into a temp                                       
+                                        //lookup list for dups 
+                                        val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
+                                        if (val.lexeme != Lexie.LexemeString[increments])
+                                        {
+                                            //insert after storing the value
+                                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments], depth, SymbolTable.RecordEnum.Constant);
+                                        }
+
                                         increments++;
                                         Rest();
                                         break;
@@ -76,6 +112,16 @@ namespace CSC446_Assignment_5_Nguyen
                                 case "numt":
                                 case "semit":
                                     {
+                                        //check if float or int then increase offset 
+                                        if (Lexie.MatchTokens[increments] == "intt")
+                                        {
+                                            totalOffset += intOffset;
+                                        }
+                                        else if (Lexie.MatchTokens[increments] == "floatt")
+                                        {
+                                            totalOffset += floatOffset;
+                                        }
+
                                         Decl();
                                         break;
                                     }
@@ -111,6 +157,8 @@ namespace CSC446_Assignment_5_Nguyen
             {
                 case "lparent":
                     {
+                        //increase depth
+                        depth++;
                         increments++;
                         Paramlist();
 
@@ -159,9 +207,32 @@ namespace CSC446_Assignment_5_Nguyen
                 case "floatt":
                 case "chart":
                     {
+                        //increase offset 
+                        if (Lexie.MatchTokens[increments] == "intt")
+                        {
+                            currentOffset = intOffset;
+                        }
+                        else if (Lexie.MatchTokens[increments] == "floatt")
+                        {
+                            currentOffset = floatOffset;
+                        }
+                        else
+                        {
+                            currentOffset = charOffset;
+                        }
+
+                        totalOffset += currentOffset;
+
                         increments++;
                         if (Lexie.MatchTokens[increments] == "idt")
                         {
+                            //check for dups and insert 
+                            val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
+                            if (val.lexeme != Lexie.LexemeString[increments])
+                            {
+                                //insert after storing the value
+                                SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments], depth, SymbolTable.RecordEnum.Variable);
+                            }
                             increments++;
                             ParamTail();
                         }
@@ -191,16 +262,40 @@ namespace CSC446_Assignment_5_Nguyen
             {
                 case "commat":
                     {
+
                         increments++;
 
                         if (Lexie.MatchTokens[increments] == "intt" | Lexie.MatchTokens[increments] == "floatt" | Lexie.MatchTokens[increments] == "chart")
                         {
+                            //offset increase 
+                            if (Lexie.MatchTokens[increments] == "intt")
+                            {
+                                currentOffset = intOffset;
+                            }
+                            else if (Lexie.MatchTokens[increments] == "floatt")
+                            {
+                                currentOffset = floatOffset;
+                            }
+                            else
+                            {
+                                currentOffset = charOffset;
+                            }
+
+                            totalOffset += currentOffset;
+
                             increments++;
 
                             switch (Lexie.MatchTokens[increments]) //this will see if the MatchTokens will match "idt" if it does call Rest, else error
                             {
                                 case "idt":
                                     {
+                                        //lookup for dups and insert
+                                        val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
+                                        if (val.lexeme != Lexie.LexemeString[increments])
+                                        {
+                                            //insert after storing the value
+                                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments], depth, SymbolTable.RecordEnum.Variable);
+                                        }
                                         increments++;
                                         ParamTail();
                                         break;
@@ -272,6 +367,7 @@ namespace CSC446_Assignment_5_Nguyen
             }
         }
 
+        
         /// <summary>
         /// The Decl will see if the MatchToken matches either int, float, char, or '}'. If it doesn't then it will throw an error
         /// </summary>
@@ -283,12 +379,32 @@ namespace CSC446_Assignment_5_Nguyen
                 case "floatt":
                 case "chart":
                     {
+                        //offsets increase 
+                        if (Lexie.MatchTokens[increments] == "intt")
+                        {
+                            currentOffset = intOffset;
+                        }
+                        else if (Lexie.MatchTokens[increments] == "floatt")
+                        {
+                            currentOffset = floatOffset;
+                        }
+                        else
+                        {
+                            currentOffset = charOffset;
+                        }
+
+                        totalOffset += currentOffset;
+
                         increments++;
                         IDList();
                         break;
                     }
                 case "closeCurlyParent":
                     {
+                        //decrease depth 
+                        depth--;
+                        //print lexeme, class of lexeme (function, constant, or variable) 
+                        SymbolTable.writeTable(depth);
                         break;
                     }
                 case "constt":
@@ -299,6 +415,15 @@ namespace CSC446_Assignment_5_Nguyen
                             case "assignopt":
                             case "numt":
                                 {
+                                    //check if float or int then increase offset 
+                                    if (Lexie.MatchTokens[increments] == "intt")
+                                    {
+                                        totalOffset += intOffset;
+                                    }
+                                    else if (Lexie.MatchTokens[increments] == "floatt")
+                                    {
+                                        totalOffset += floatOffset;
+                                    }
                                     Decl();
                                     break;
                                 }
@@ -324,6 +449,13 @@ namespace CSC446_Assignment_5_Nguyen
             {
                 case "idt":
                     {
+                        //lookup for dups and insert
+                        val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
+                        if (val.lexeme != Lexie.LexemeString[increments])
+                        {
+                            //insert after storing the value
+                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments], depth, SymbolTable.RecordEnum.Variable);
+                        }
                         increments++;
                         IDTail();
 
@@ -362,11 +494,21 @@ namespace CSC446_Assignment_5_Nguyen
             {
                 case "commat":
                     {
+                        //increase sym tab offset += local current offset
+                        totalOffset += currentOffset;
+
                         increments++;
                         switch (Lexie.MatchTokens[increments])
                         {
                             case "idt":
                                 {
+                                    //lookup for dups and insert
+                                    val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
+                                    if (val.lexeme != Lexie.LexemeString[increments])
+                                    {
+                                        //insert after storing the value
+                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments], depth, SymbolTable.RecordEnum.Variable);
+                                    }
                                     increments++;
                                     IDTail();
                                     break;
@@ -393,5 +535,9 @@ namespace CSC446_Assignment_5_Nguyen
                     }
             }
         }
+
     }
 }
+
+
+

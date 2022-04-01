@@ -12,11 +12,12 @@ using System.Threading.Tasks;
 
 namespace CSC446_Assignment_5_Nguyen
 {
-    class SymbolTable
+    public class SymbolTable
     {
         public const int TableSize = 211;
 
         public static List<entryTable>[] symboltable;
+
 
         /// <summary>
         /// this will have the tokens, depth, and lexeme to be used during the hash of the symbol table
@@ -24,7 +25,7 @@ namespace CSC446_Assignment_5_Nguyen
         public class entryTable
         {
             public int depth;
-            public Lexie.Symbols Token;
+            public string Token;
             public string lexeme;
             public RecordEnum typeOfEntry;
         }
@@ -91,13 +92,21 @@ namespace CSC446_Assignment_5_Nguyen
             public VariableEnum funType;
         }
 
+        public static void symList()
+        {
+            symboltable = new List<entryTable>[TableSize];
+            for(int i = 0; i<TableSize; i++)
+            {
+                symboltable[i] = new List<entryTable>();
+            }
+        }
         /// <summary>
         /// referenced pseduocode from class and comparing with peers
         /// </summary>
         /// <param name="Lexeme"></param>
         /// <param name="Token"></param>
         /// <param name="depth"></param>
-        public void insert(string Lexeme, Lexie.Symbols Token, int depth)
+        public static void insert(string Lexeme, string Token, int depth, RecordEnum record)
         {
             uint x;
             x = hash(Lexeme);
@@ -108,6 +117,7 @@ namespace CSC446_Assignment_5_Nguyen
             EntryVar.lexeme = Lexeme;
             EntryVar.Token = Token;
             EntryVar.depth = depth;
+            EntryVar.typeOfEntry = record;
 
             //no error checking performed
 
@@ -117,24 +127,23 @@ namespace CSC446_Assignment_5_Nguyen
 
         }
 
+
         /// <summary>
         /// will use the entry table created and will look up a certain lexeme and return where that lexeme is located 
         /// </summary>
         /// <param name="tempLexeme"></param>
         /// <returns></returns>
-        public entryTable lookup(string tempLexeme)
+        public static entryTable lookUp(string lex)
         {
-            entryTable Location = new entryTable();
-
-            foreach (var tableEntry in symboltable[hash(tempLexeme)])
+            entryTable lookUpReturn = new entryTable();
+            foreach (var tableEntry in symboltable[hash(lex)])
             {
-                if (tableEntry.lexeme == tempLexeme)
+                if (tableEntry.lexeme == lex)
                 {
-                    return Location = tableEntry; //returns location of that table entry
+                    lookUpReturn = tableEntry;
                 }
             }
-            return null;    //returns nul if the lexeme doesn't equal the temp lexeme
-
+            return (lookUpReturn);
         }
 
         /// <summary>
@@ -160,18 +169,24 @@ namespace CSC446_Assignment_5_Nguyen
         /// this is for displaying the variables: lexeme, token, and the depth
         /// </summary>
         /// <param name="depth"></param>
-        public void writeTable(int depth)
-        {
-            Console.WriteLine("Lexeme", "Token", "Depth");
-            Console.WriteLine("_________________________");
+        public static void writeTable(int depth)
+        {               
+            string pad = " ";
+            Console.WriteLine("Lexeme" + pad.PadRight(12) + "Token" + pad.PadRight(12) + "Depth" + pad.PadRight(12) + "Type");
+            Console.WriteLine("_______________________________________________________");
 
             foreach (List<entryTable> info in symboltable)
             {
+
+
                 if (info.Count > 0)
                 {
-                    for (int i = 0; i < Lexie.counting; i++)
+                    foreach(var i in info)
                     {
-                        Console.WriteLine(Lexie.Lexeme, Lexie.Token, depth);
+                        if(i.depth == depth)
+                        {
+                            Console.WriteLine(i.lexeme + pad.PadRight(12) + i.Token + pad.PadRight(12) + i.depth + pad.PadRight(12) + i.typeOfEntry);
+                        }
                     }
 
                 }
@@ -185,7 +200,7 @@ namespace CSC446_Assignment_5_Nguyen
         /// </summary>
         /// <param name="Lexeme"></param>
         /// <returns></returns>
-        private uint hash(string Lexeme)
+        private static uint hash(string Lexeme)
         {
             uint h = 0, g;
 
