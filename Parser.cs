@@ -120,10 +120,10 @@ namespace CSC446_Assignment_5_Nguyen
                                             //store after the value into a temp                                       
                                             //lookup list for dups 
                                             val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
-                                            increments++; //looks ahead to determine if function or variable
+                                           
                                             if (val.lexeme != Lexie.LexemeString[increments])
                                             {
-
+                                                increments++; //looks ahead to determine if function or variable
                                                 if (Lexie.MatchTokens[increments] == "commat" || Lexie.MatchTokens[increments] == "semit")
                                                 {
                                                     increments--;
@@ -135,6 +135,7 @@ namespace CSC446_Assignment_5_Nguyen
                                                     //insert after storing the value
                                                     SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Function);
                                                 }
+
 
                                             }
                                             else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
