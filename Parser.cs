@@ -56,13 +56,13 @@ namespace CSC446_Assignment_5_Nguyen
             //}
 
             Prog();
-        }
+
+    }
 
         /// <summary>
         /// The Prog sees if the the current MatchToken equals either int, float, or char. If it doesn't equal any of those go to eofft
         /// PROG -> TYPE idt REST PROG |
         //const idt = num; PROG |
-        /// </summary>
         public static void Prog()
         {
             bool done = false;
@@ -76,7 +76,7 @@ namespace CSC446_Assignment_5_Nguyen
                     case "chart":
                         {
                             //offset increase base on type 
-                            if(Lexie.MatchTokens[increments] == "intt")
+                            if (Lexie.MatchTokens[increments] == "intt")
                             {
                                 currentOffset = intOffset;
                             }
@@ -97,8 +97,7 @@ namespace CSC446_Assignment_5_Nguyen
                             {
                                 case "idt":
                                     {
-
-                                        if(Lexie.MatchTokens[increments] == "commat")
+                                        if (Lexie.MatchTokens[increments] == "commat")
                                         {
                                             //store after the value into a temp                                       
                                             //lookup list for dups 
@@ -107,6 +106,13 @@ namespace CSC446_Assignment_5_Nguyen
                                             {
                                                 //insert after storing the value
                                                 SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                                            }
+                                            else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                                            {
+                                                Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                                                Environment.Exit(1);
+                                                break;
+
                                             }
                                         }
                                         else
@@ -119,6 +125,13 @@ namespace CSC446_Assignment_5_Nguyen
                                                 //insert after storing the value
                                                 SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Function);
                                             }
+                                            else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                                            {
+                                                Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                                                Environment.Exit(1);
+                                                break;
+
+                                            }
 
                                         }
                                         increments++;
@@ -126,17 +139,26 @@ namespace CSC446_Assignment_5_Nguyen
                                         break;
                                     }
                                 case "constt":
-                                    //store after the value into a temp                                       
-                                    //lookup list for dups 
-                                    val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
-                                    if (val.lexeme != Lexie.LexemeString[increments])
                                     {
-                                        //insert after storing the value
-                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
+                                        //store after the value into a temp                                       
+                                        //lookup list for dups 
+                                        val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
+                                        if (val.lexeme != Lexie.LexemeString[increments])
+                                        {
+                                            //insert after storing the value
+                                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
+                                        }
+                                        else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                                        {
+                                            Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                                            Environment.Exit(1);
+                                            break;
+
+                                        }
+                                        increments++;
+                                        Prog();
+                                        break;
                                     }
-                                    increments++;
-                                    Rest();
-                                    break;
                                 default:
                                     {
                                         Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'idt'. Not correct Grammar.");
@@ -147,65 +169,97 @@ namespace CSC446_Assignment_5_Nguyen
                             break;
                         }
                     case "constt":
+                        increments++;
+                        switch (Lexie.MatchTokens[increments])
                         {
-                            increments++;
-                            switch (Lexie.MatchTokens[increments])
-                            {
-                                case "idt":
-                                    val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
-                                    if (val.lexeme != Lexie.LexemeString[increments])
-                                    {
-                                        //insert after storing the value
-                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
-                                    }
+                            case "idt":
+                                {
                                     increments++;
                                     switch (Lexie.MatchTokens[increments])
                                     {
                                         case "assignopt":
-                                            increments++;
-                                            switch (Lexie.MatchTokens[increments])
                                             {
-                                                case "numt":
-                                                    increments++;
-                                                    switch (Lexie.MatchTokens[increments])
-                                                    {
-                                                        case "semit":
-                                                            increments++;
+                                                increments++;
+                                                switch (Lexie.MatchTokens[increments])
+                                                {
+                                                    case "numt":
+                                                        {
+                                                            //check if float or int then increase offset 
+                                                            if (Lexie.MatchTokens[increments] == "intt")
                                                             {
-                                                                //check if float or int then increase offset 
-                                                                if (Lexie.MatchTokens[increments] == "intt")
-                                                                {
-                                                                    totalOffset += intOffset;
-                                                                }
-                                                                else if (Lexie.MatchTokens[increments] == "floatt")
-                                                                {
-                                                                    totalOffset += floatOffset;
-                                                                }
-
-                                                                Decl();
-                                                                break;
+                                                                totalOffset += intOffset;
                                                             }
-                                                    }
-                                                    break;
+                                                            else if (Lexie.MatchTokens[increments] == "floatt")
+                                                            {
+                                                                totalOffset += floatOffset;
+                                                            }
+                                                            increments++;
+                                                            switch (Lexie.MatchTokens[increments])
+                                                            {
+                                                                case "semit":
+                                                                    {
+                                                                        increments++;
+                                                                        Prog();
+                                                                        break;
+                                                                    }
+                                                                case "eoftt":
+                                                                    done = true;
+                                                                    break;
+                                                                default:
+                                                                    {
+                                                                        done = true;
+                                                                        Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'semit'. Not correct Grammar.");
+                                                                        Environment.Exit(1);
+                                                                        break;
+                                                                    }
+                                                            }
+                                                            break;
+                                                        }
+                                                    case "eoftt":
+                                                        done = true;
+                                                        break;
+                                                    default:
+                                                        {
+                                                            done = true;
+                                                            Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'numt'. Not correct Grammar.");
+                                                            Environment.Exit(1);
+                                                            break;
+                                                        }
+                                                }
+                                                break;
                                             }
+                                        case "eoftt":
+                                            done = true;
                                             break;
+                                        default:
+                                            {
+                                                done = true;
+                                                Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'assignopt'. Not correct Grammar.");
+                                                Environment.Exit(1);
+                                                break;
+                                            }
                                     }
                                     break;
-                                case "eoftt":
-                                    {
-                                        done = true;
-                                        break;
-                                    }
-                            }
-                            break;
+                                }
+                            case "eoftt":
+                                done = true;
+                                break;
+                            default:
+                                {
+                                    done = true;
+                                    Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'idt'. Not correct Grammar.");
+                                    Environment.Exit(1);
+                                    break;
+                                }
                         }
+                        break;
                     case "eoftt":
                         done = true;
                         break;
                     default:
                         {
                             done = true;
-                            Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'intt', 'floatt', or 'chart'. Not correct Grammar.");
+                            Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'intt', 'floatt', 'constt' or 'chart'. Not correct Grammar.");
                             Environment.Exit(1);
                             break;
                         }
@@ -292,12 +346,18 @@ namespace CSC446_Assignment_5_Nguyen
                         increments++;
                         if (Lexie.MatchTokens[increments] == "idt")
                         {
-                            //check for dups and insert 
                             val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
                             if (val.lexeme != Lexie.LexemeString[increments])
                             {
                                 //insert after storing the value
-                                SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments-1], depth, SymbolTable.RecordEnum.Variable);
+                                SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                            }
+                            else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                            {
+                                Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                                Environment.Exit(1);
+                                break;
+
                             }
                             increments++;
                             ParamTail();
@@ -305,7 +365,8 @@ namespace CSC446_Assignment_5_Nguyen
 
                         else
                         {
-                            Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'idt'. Not correct Grammar."); Environment.Exit(1);
+                            Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'idt'. Not correct Grammar."); 
+                            Environment.Exit(1);
                         }
                         break;
                     }
@@ -328,12 +389,10 @@ namespace CSC446_Assignment_5_Nguyen
             {
                 case "commat":
                     {
-
                         increments++;
 
                         if (Lexie.MatchTokens[increments] == "intt" | Lexie.MatchTokens[increments] == "floatt" | Lexie.MatchTokens[increments] == "chart")
                         {
-                            //offset increase 
                             if (Lexie.MatchTokens[increments] == "intt")
                             {
                                 currentOffset = intOffset;
@@ -360,7 +419,14 @@ namespace CSC446_Assignment_5_Nguyen
                                         if (val.lexeme != Lexie.LexemeString[increments])
                                         {
                                             //insert after storing the value
-                                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments-1], depth, SymbolTable.RecordEnum.Variable);
+                                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                                        }
+                                        else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                                        {
+                                            Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                                            Environment.Exit(1);
+                                            break;
+
                                         }
                                         increments++;
                                         ParamTail();
@@ -408,7 +474,6 @@ namespace CSC446_Assignment_5_Nguyen
                         Decl();
                         if (Lexie.MatchTokens[increments] == "closeCurlyParent")
                         {
-
                             increments++;
                             Prog();
                             if (Lexie.MatchTokens[increments] == "eoftt")
@@ -433,7 +498,6 @@ namespace CSC446_Assignment_5_Nguyen
                     }
             }
         }
-
 
         /// <summary>
         /// The Decl will see if the MatchToken matches either int, float, char, or '}'. If it doesn't then it will throw an error
@@ -471,13 +535,12 @@ namespace CSC446_Assignment_5_Nguyen
                 case "closeCurlyParent":
                     {
                         //decrease depth 
-                        if(depth > 0)
+                        if (depth > 0)
                         {
                             SymbolTable.writeTable(depth);
                         }
                         depth--;
-                        //print lexeme, class of lexeme (function, constant, or variable) 
-                        SymbolTable.writeTable(depth);
+                         SymbolTable.writeTable(depth);
                         break;
                     }
                 case "constt":
@@ -485,47 +548,90 @@ namespace CSC446_Assignment_5_Nguyen
                         increments++;
                         switch (Lexie.MatchTokens[increments])
                         {
-
                             case "idt":
-                                //lookup for dups and insert
-                                val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
-                                if (val.lexeme != Lexie.LexemeString[increments])
                                 {
-                                    //insert after storing the value
-                                    SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
-                                }
-                                increments++;
-                                switch (Lexie.MatchTokens[increments])
-                                {
-                                    case "assignopt":
-                                        increments++;
-                                        switch (Lexie.MatchTokens[increments])
-                                        {
-                                            case "numt":
+                                    //lookup for dups and insert
+                                    val = SymbolTable.lookUp(Lexie.LexemeString[increments]);
+                                    if (val.lexeme != Lexie.LexemeString[increments])
+                                    {
+                                        //insert after storing the value
+                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
+                                    }
+                                    else if(val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                                    {
+                                        Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                                        Environment.Exit(1);
+                                        break;
+
+                                    }
+                                    increments++;
+                                    switch (Lexie.MatchTokens[increments])
+                                    {
+                                        case "assignopt":
+                                            {
+                                                increments++;
+                                                switch (Lexie.MatchTokens[increments])
                                                 {
-                                                    //check if float or int then increase offset 
-                                                    if (Lexie.MatchTokens[increments] == "intt")
-                                                    {
-                                                        totalOffset += intOffset;
-                                                    }
-                                                    else if (Lexie.MatchTokens[increments] == "floatt")
-                                                    {
-                                                        totalOffset += floatOffset;
-                                                    }
-                                                    Decl();
-                                                    break;
+                                                    case "numt":
+                                                        {
+                                                            //check if float or int then increase offset 
+                                                            if (Lexie.MatchTokens[increments] == "intt")
+                                                            {
+                                                                totalOffset += intOffset;
+                                                            }
+                                                            else if (Lexie.MatchTokens[increments] == "floatt")
+                                                            {
+                                                                totalOffset += floatOffset;
+                                                            }
+
+                                                            increments++;
+                                                            switch (Lexie.MatchTokens[increments])
+                                                            {
+                                                                case "semit":
+                                                                    {
+                                                                        increments++;
+                                                                        Decl();
+                                                                        break;
+                                                                    }
+                                                                case "eoftt":
+                                                                    break;
+                                                                default:
+                                                                    {
+                                                                        Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'semit'. Not correct Grammar.");
+                                                                        Environment.Exit(1);
+                                                                        break;
+                                                                    }
+                                                            }
+                                                            break;
+                                                        }
+                                                    case "eoftt":
+                                                        break;
+                                                    default:
+                                                        {
+                                                            Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'numt'. Not correct Grammar.");
+                                                            Environment.Exit(1);
+                                                            break;
+                                                        }
                                                 }
                                                 break;
-                                        }
-                                        break;
+                                            }
+                                        case "eoftt":
+                                            break;
+                                        default:
+                                            {
+                                                Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'assignopt'. Not correct Grammar.");
+                                                Environment.Exit(1);
+                                                break;
+                                            }
+                                    }
+                                    break;
                                 }
-                                break;
                         }
                         break;
                     }
                 default:
                     {
-                        Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'intt', 'floatt', or 'chart'. Not correct Grammar.");
+                        Console.WriteLine("Error: " + Lexie.MatchTokens[increments] + " was found when searching for 'intt', 'floatt', 'const' or 'chart'. Not correct Grammar.");
                         Environment.Exit(1);
                         break;
                     }
@@ -547,7 +653,14 @@ namespace CSC446_Assignment_5_Nguyen
                         if (val.lexeme != Lexie.LexemeString[increments])
                         {
                             //insert after storing the value
-                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments-1], depth, SymbolTable.RecordEnum.Variable);
+                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                        }
+                        else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                        {
+                            Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                            Environment.Exit(1);
+                            break;
+
                         }
                         increments++;
                         IDTail();
@@ -583,13 +696,8 @@ namespace CSC446_Assignment_5_Nguyen
         /// </summary>
         public static void IDTail()
         {
-    
             switch (Lexie.MatchTokens[increments])
             {
-                case "lparent":
-                    Rest();
-                    break;
-                
                 case "commat":
                     {
                         //increase sym tab offset += local current offset
@@ -605,8 +713,16 @@ namespace CSC446_Assignment_5_Nguyen
                                     if (val.lexeme != Lexie.LexemeString[increments])
                                     {
                                         //insert after storing the value
-                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments-3], depth, SymbolTable.RecordEnum.Variable);
+                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 3], depth, SymbolTable.RecordEnum.Variable);
                                     }
+                                    else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
+                                    {
+                                        Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
+                                        Environment.Exit(1);
+                                        break;
+
+                                    }
+
                                     increments++;
                                     IDTail();
                                     break;
@@ -622,7 +738,6 @@ namespace CSC446_Assignment_5_Nguyen
                     }
                 case "semit":
                     {
-                        //increments++;
                         break;
 
                     }
