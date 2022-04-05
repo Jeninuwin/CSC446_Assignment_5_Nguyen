@@ -165,15 +165,14 @@ namespace CSC446_Assignment_5_Nguyen
         /// https://stackoverflow.com/questions/10018957/how-to-remove-item-from-list-in-c
         /// </summary>
         /// <param name="depth"></param>
-        public void deleteDepth(int depth)
+        public static void deleteDepth(int depth)
         {
             foreach (List<entryTable> locationCount in symboltable)
             {
-                var deleting = locationCount.SingleOrDefault(depth => depth.lexeme == Lexie.Lexeme);
 
-                if (locationCount.Count != 0)
+                if (locationCount.Count > 0)
                 {
-                    locationCount.Remove(deleting);
+                    locationCount.RemoveAll(remove => remove.depth == depth);
                 }
             }
         }

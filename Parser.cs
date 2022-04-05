@@ -107,6 +107,13 @@ namespace CSC446_Assignment_5_Nguyen
                                                 //insert after storing the value
                                                 SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
                                             }
+
+                                            else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                                            {
+                                                SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                                            }
+
+
                                             else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                                             {
                                                 Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -138,6 +145,24 @@ namespace CSC446_Assignment_5_Nguyen
 
 
                                             }
+
+                                            else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                                            {
+                                                increments++; //looks ahead to determine if function or variable
+                                                if (Lexie.MatchTokens[increments] == "commat" || Lexie.MatchTokens[increments] == "semit")
+                                                {
+                                                    increments--;
+                                                    SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                                                }
+                                                else
+                                                {
+                                                    increments--;
+                                                    //insert after storing the value
+                                                    SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Function);
+                                                }
+                                            }
+
+
                                             else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                                             {
                                                 Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -161,6 +186,13 @@ namespace CSC446_Assignment_5_Nguyen
                                             //insert after storing the value
                                             SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
                                         }
+
+                                        else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                                        {
+                                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
+                                        }
+
+
                                         else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                                         {
                                             Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -195,6 +227,13 @@ namespace CSC446_Assignment_5_Nguyen
                                         //insert after storing the value
                                         SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
                                     }
+
+                                    else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                                    {
+                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
+                                    }
+
+
                                     else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                                     {
                                         Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -380,6 +419,13 @@ namespace CSC446_Assignment_5_Nguyen
                                 //insert after storing the value
                                 SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
                             }
+
+                            else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                            {
+                                SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                            }
+
+
                             else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                             {
                                 Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -449,6 +495,13 @@ namespace CSC446_Assignment_5_Nguyen
                                             //insert after storing the value
                                             SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
                                         }
+
+                                        else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                                        {
+                                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                                        }
+
+
                                         else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                                         {
                                             Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -567,6 +620,7 @@ namespace CSC446_Assignment_5_Nguyen
                         {
                             SymbolTable.writeTable(depth);
                         }
+                        SymbolTable.deleteDepth(depth);
                         depth--;
                          SymbolTable.writeTable(depth);
                         break;
@@ -585,6 +639,12 @@ namespace CSC446_Assignment_5_Nguyen
                                         //insert after storing the value
                                         SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
                                     }
+
+                                    else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                                    {
+                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Constant);
+                                    }
+
                                     else if(val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                                     {
                                         Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -683,6 +743,13 @@ namespace CSC446_Assignment_5_Nguyen
                             //insert after storing the value
                             SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
                         }
+
+                        else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                        {
+                            SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 1], depth, SymbolTable.RecordEnum.Variable);
+                        }
+
+
                         else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                         {
                             Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
@@ -724,12 +791,28 @@ namespace CSC446_Assignment_5_Nguyen
         /// </summary>
         public static void IDTail()
         {
+            string position;
             switch (Lexie.MatchTokens[increments])
             {
                 case "commat":
                     {
+                        if (currentOffset == intOffset)
+                        {
+                            position = "intt";
+                        }
+                        else if (currentOffset == charOffset)
+                        {
+                            position = "chart";
+                        }
+                        else
+                        {
+                            position = "floatt";
+                        }
+
                         //increase sym tab offset += local current offset
                         totalOffset += currentOffset;
+
+                        
 
                         increments++;
                         switch (Lexie.MatchTokens[increments])
@@ -741,8 +824,15 @@ namespace CSC446_Assignment_5_Nguyen
                                     if (val.lexeme != Lexie.LexemeString[increments])
                                     {
                                         //insert after storing the value
-                                        SymbolTable.insert(Lexie.LexemeString[increments], Lexie.MatchTokens[increments - 3], depth, SymbolTable.RecordEnum.Variable);
+                                        SymbolTable.insert(Lexie.LexemeString[increments], position, depth, SymbolTable.RecordEnum.Variable);
                                     }
+
+                                    else if (val.lexeme == Lexie.LexemeString[increments] && val.depth != depth)
+                                    {
+                                        SymbolTable.insert(Lexie.LexemeString[increments], position, depth, SymbolTable.RecordEnum.Variable);
+                                    }
+
+
                                     else if (val.lexeme == Lexie.LexemeString[increments] && val.depth == depth)
                                     {
                                         Console.WriteLine("Error: " + val.lexeme + " was found when searching for duplicates. The depth found at:" + depth);
